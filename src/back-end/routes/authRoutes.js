@@ -1,8 +1,10 @@
 // routes/authRoutes.js
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+import express from 'express';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import User from '../models/User';
+import process from 'process';
+
 
 const router = express.Router();
 
@@ -32,8 +34,30 @@ router.post('/login', async (req, res) => {
 
     res.json({ token });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-module.exports = router;
+router.post('/api/register', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Check if the user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email already in use' });
+    }
+
+    // Create and save the new user
+    const user = new User({ email, password });
+    await user.save();
+
+    return res.json({ message: 'User registered successfully' });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+});
+
+export default router;

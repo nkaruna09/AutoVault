@@ -1,15 +1,34 @@
 // LoginForm.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './LoginForm.css';
+
+
 
 function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Email:', email);
-    console.log('Password:', password);
+
+    const response = await fetch('http://localhost:5000/api/login', { // Adjust URL if needed for production
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      // If login is successful, redirect to the dashboard
+      window.location.href = data.redirectTo; // Redirect to /dashboard
+    } else {
+      // Show error message if login fails
+      setErrorMessage(data.message || 'Something went wrong!');
+    }
   };
 
   return (
@@ -33,6 +52,7 @@ function LoginForm() {
           />
           <input type="submit" value="Login" />
         </form>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
         <a href="#" className="forgot-password">
           Forgot your password?
         </a>
