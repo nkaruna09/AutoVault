@@ -39,12 +39,13 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.post('/api/register', async (req, res) => {
+router.post('/register', async (req, res) => {
   const { email, password } = req.body;
 
   try {
     // Check if the user already exists
     const existingUser = await User.findOne({ email });
+    console.log("Logging.");
     if (existingUser) {
       return res.status(400).json({ message: 'Email already in use' });
     }
@@ -52,6 +53,7 @@ router.post('/api/register', async (req, res) => {
     // Create and save the new user
     const user = new User({ email, password });
     await user.save();
+    console.log("User registered successfully");
 
     return res.json({ message: 'User registered successfully' });
   } catch (error) {

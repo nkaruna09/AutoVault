@@ -1,15 +1,17 @@
+// LoginForm.jsx
 import { useState } from 'react';
-import './LoginForm.css';
 
-function LoginForm() {
+
+
+function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch('http://localhost:5000/api/login', {
+    const response = await fetch('http://localhost:5000/api/register', { // Adjust URL if needed for production
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -28,32 +30,11 @@ function LoginForm() {
     }
   };
 
-  const handleRegister = async () => {
-    console.log("Registering.");
-    const response = await fetch('http://localhost:5000/api/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      // If registration is successful, redirect or show a success message
-      window.location.href = '/dashboard'; // Adjust as needed
-    } else {
-      // Show error message if registration fails
-      setErrorMessage(data.message || 'Registration failed!');
-    }
-  };
-
   return (
     <div className="login-container">
       <div className="login-box">
         <h2>Login</h2>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleSubmit}>
           <input
             type="email"
             placeholder="Enter your email"
@@ -69,9 +50,6 @@ function LoginForm() {
             required
           />
           <input type="submit" value="Login" />
-          <button type="button" onClick={handleRegister}>
-            Register
-          </button>
         </form>
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         <a href="#" className="forgot-password">
@@ -82,4 +60,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export default Register;

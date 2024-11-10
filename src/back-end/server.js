@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cors());
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {
+mongoose.connect("mongodb+srv://zuhairq01:N9TjtTOQEfSwuBVx@autovault.k74lu.mongodb.net/?retryWrites=true&w=majority&appName=AutoVault", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
@@ -46,6 +46,28 @@ app.post('/api/login', async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.post('/api/register', async (req, res) => {
+  const { email, password } = req.body;
+  console.log("Successful registry");
+
+  try {
+    // Check if the email is already in use
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email already in use' });
+    }
+
+    // Create and save the new user
+    const newUser = new User({ email, password });
+    await newUser.save();
+
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (error) {
+    console.error('Error registering user:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
