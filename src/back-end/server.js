@@ -45,6 +45,7 @@ app.post('/api/login', async (req, res) => {
     return res.json({ message: 'Login successful', redirectTo: '/dashboard' });
   } catch (error) {
     console.log(error);
+    console.log("Hello");
     return res.status(500).json({ message: 'Server error' });
   } 
 });  
