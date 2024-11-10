@@ -47,7 +47,7 @@ app.post('/api/login', async (req, res) => {
     console.log(error);
     return res.status(500).json({ message: 'Server error' });
   } 
-});
+}); 
 
 app.post('/api/register', async (req, res) => {
   const { email, password } = req.body;
