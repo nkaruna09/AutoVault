@@ -11,13 +11,14 @@ console.log(process.env.MONGO_URI);
 
 const app = express();
 const port = process.env.PORT || 5000;
+const mongo_uri = process.env.MONGO_URI;
 
 // Middleware to parse JSON
 app.use(express.json());
 app.use(cors());
 
 // Connect to MongoDB
-mongoose.connect("mongodb+srv://zuhairq01:N9TjtTOQEfSwuBVx@autovault.k74lu.mongodb.net/?retryWrites=true&w=majority&appName=AutoVault", {
+mongoose.connect(mongo_uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
